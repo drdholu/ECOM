@@ -3,7 +3,7 @@ import { prismaClient } from "..";
 import { compareSync, hashSync } from "bcrypt";
 import * as jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../secrets";
-
+import { ErrorCode } from "../exceptions/root";
 
 enum ResponseStatus {
     Success = 200,
@@ -22,12 +22,12 @@ export const login = async (req: Request, res: Response) => {
         })
 
         if(!userExists) 
-            return res.status(ResponseStatus.NotFound).json({
+            return res.status(ErrorCode.userExists).json({
                 msg: "user doesn't exist"
             })
 
         if(!compareSync(password, userExists.password)) {
-            return res.status(ResponseStatus.Error).json({
+            return res.status(ErrorCode.IncorrectPass).json({
                 msg: "Incorrect password/email"
             })
         }
@@ -57,7 +57,7 @@ export const signup = async (req: Request, res: Response) => {
         })
 
         if(userExists) 
-            return res.status(ResponseStatus.NotFound).json({
+            return res.status(ErrorCode.UserNotFound).json({
                 msg: "user alr exists"
             })
 

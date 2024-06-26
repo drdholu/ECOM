@@ -29,6 +29,13 @@ npm start # make sure to modify the package.json file first
 
 ```
 
+# prisma cmds
+
+```bash
+npx prisma migrate dev --name Initialize the schema # give another name
+npx prisma generate # to generate client
+```
+
 # File structure
 
 src
@@ -42,7 +49,7 @@ nodemon.json
 
 # Nodemon configs
 
-```json
+```js
 //./nodemon.json
 {
     "watch": ["src"],
@@ -51,7 +58,7 @@ nodemon.json
 }
 ```
 
-```json
+```js
 // ./package.json
 //...
 
