@@ -6,7 +6,8 @@ import { JWT_SECRET } from "../secrets";
 import { ErrorCode } from "../exceptions/root";
 import { BadReq } from "../exceptions/BadReq";
 import { UnproccesableEntity } from "../exceptions/validation";
-import { SignUpSchema } from "../schema/users";
+import { LoginSchema, SignUpSchema } from "../schema/users";
+import { NotFound } from "../exceptions/not-found";
 
 enum ResponseStatus {
     Success = 200,
@@ -52,33 +53,57 @@ enum ResponseStatus {
 export const login = async (req: Request, res: Response, next: NextFunction) => {
     const {email, password} = req.body
 
-    try {
-        const userExists = await prismaClient.user.findFirst({
-            where: {
-                email: email
-            }
-        })
-
-        if(!userExists) {
-            next(new BadReq("User doesn't exist", ErrorCode.userExists));
-            return; // to remove error ('userExists' is possibly 'null'.ts(18047))
+    LoginSchema.parse(req.body);
+    const userExists = await prismaClient.user.findFirst({
+        where: {
+            email: email
         }
+    })
 
-        if(!compareSync(password, userExists.password)) {
-            next(new BadReq("Incorrect password/email", ErrorCode.IncorrectPass));
-            return;
-        }
-
-        const token = jwt.sign({userId: userExists.id}, JWT_SECRET)
-
-        res.status(ResponseStatus.Success).json({
-            user: userExists,
-            token: token,
-        })
-        
-    } catch (error: any) {
-        next(new UnproccesableEntity(error?.issues, 'Login error', ErrorCode.UnproccesableEntity));
+    if(!userExists) {
+        next(new NotFound("User doesn't exist", ErrorCode.UserNotFound));
+        return; // return to remove error ('userExists' is possibly 'null'.ts(18047))
     }
+
+    if(!compareSync(password, userExists.password)) {
+        next(new BadReq("Incorrect password/email", ErrorCode.IncorrectPass));
+        return;
+    }
+
+    const token = jwt.sign({userId: userExists.id}, JWT_SECRET)
+
+    res.status(ResponseStatus.Success).json({
+        user: userExists,
+        token: token,
+    })
+
+    // try {
+    //     const userExists = await prismaClient.user.findFirst({
+    //         where: {
+    //             email: email
+    //         }
+    //     })
+
+    //     if(!userExists) {
+    //         next(new BadReq("User doesn't exist", ErrorCode.userExists));
+    //         return; // to remove error ('userExists' is possibly 'null'.ts(18047))
+    //     }
+
+    //     if(!compareSync(password, userExists.password)) {
+    //         next(new BadReq("Incorrect password/email", ErrorCode.IncorrectPass));
+    //         return;
+    //     }
+
+    //     const token = jwt.sign({userId: userExists.id}, JWT_SECRET)
+
+    //     res.status(ResponseStatus.Success).json({
+    //         user: userExists,
+    //         token: token,
+    //     })
+        
+    // } catch (error: any) {
+    //     next(new UnproccesableEntity(error?.issues, 'Login error', ErrorCode.UnproccesableEntity));
+    // }
 }
 
 
