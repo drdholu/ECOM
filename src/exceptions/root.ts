@@ -8,6 +8,7 @@ export class HttpExceptions extends Error {
 
     constructor(message: string, statusCode: number, errorCode: ErrorCode, errors: any) {
         super(message)
+        console.log("http exception constructor")
         this.message = message
         this.errorCode = errorCode
         this.statusCode = statusCode
@@ -16,12 +17,14 @@ export class HttpExceptions extends Error {
 }
 
 export enum ErrorCode {
-    // UserNotFound = 1001,
-    UserNotFound = 400,
-    // userExists = 1002,
-    userExists = 400,
-    // IncorrectPass = 1003,
-    IncorrectPass = 400,
+    UserNotFound = 1001,
+    // UserNotFound = 400,
+    userExists = 1002,
+    // userExists = 400,
+    IncorrectPass = 1003,
+    // IncorrectPass = 400,
+    UnproccesableEntity = 1004,
+    InternalException = 1005,
     Success = 200,
     Error = 500
 }
