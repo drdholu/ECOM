@@ -4,6 +4,9 @@ import { PORT } from "./secrets";
 import { PrismaClient } from "@prisma/client";
 import { errorMiddleware } from "./middlewares/errors";
 import { SignUpSchema } from "./schema/users";
+// src/index.ts or src/app.ts
+// import './types/express';
+
 
 const app = express();
 app.use(express.json());

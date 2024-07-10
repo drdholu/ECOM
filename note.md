@@ -125,3 +125,7 @@ nodemon.json
 4. [Extended Clients](https://www.prisma.io/docs/orm/prisma-client/client-extensions#extended-clients)
 5. [Custom validation using extended clients and zod](https://www.prisma.io/docs/orm/prisma-client/queries/custom-validation)
 
+
+# typescript
+
+1. [Type declarations](https://www.typescriptlang.org/docs/handbook/2/type-declarations.html)

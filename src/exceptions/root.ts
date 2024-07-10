@@ -25,6 +25,7 @@ export enum ErrorCode {
     // IncorrectPass = 400,
     UnproccesableEntity = 1004,
     InternalException = 1005,
+    Unauthorized = 1006,
     Success = 200,
     Error = 500
 }

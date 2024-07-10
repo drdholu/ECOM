@@ -21,4 +21,4 @@ export const errorHandler = (method: Function) => {
             next(exception);
         }
     }
-}
+}   
